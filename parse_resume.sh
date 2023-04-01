@@ -14,6 +14,7 @@ curl -s  "$URL" \
     | jq '{salary: .salary.value,
         git: [.skills.value,
               .keySkills.value[].string,
+              .attestationEducation.value[][],
               .experience.value[].prettyUrl,
               .experience.value[].description
              ] | join(" "),
