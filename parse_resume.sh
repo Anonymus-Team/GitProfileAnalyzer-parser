@@ -10,7 +10,7 @@ curl -s  "$URL" \
               .experience.value[].description
              ] | join(" "),
         skills: [.keySkills.value[].string] | join(";")}' \
-    | sed -E 's/("git": ").*(github.com\/[[:alnum:]\-]+).*/\1\2",/' \
+    | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/' \
     | jq -r '[.. | if type != "object" then . else empty end] | join(",")'
 
 # last jq is finally to flatten all
