@@ -19,7 +19,7 @@ curl -s  "$URL" \
              ] | join(" "),
         skills: [.keySkills.value[].string] | join(";")}' \
     | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I' \
-    | jq -r '[.. | if type != "object" then . else empty end] | join(",")'
+    | jq -r '[.. | if type != "object" then . else empty end] | @csv'
 
 # last jq is finally to flatten all
 
