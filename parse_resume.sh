@@ -5,7 +5,11 @@ URL="$1"
 curl -s  "$URL" \
     | grep -Po '"resume": \K{.*}, "resumeIdsProfTestAttached":' \
     | head -c -31 \
-    | jq '{salary: .salary.value, git: [.skills.value, .experience.value[].description] | join(" "), skills: [.keySkills.value[].string] | join(";")}' \
+    | jq '{salary: .salary.value,
+        git: [.skills.value,
+              .experience.value[].description
+             ] | join(" "),
+        skills: [.keySkills.value[].string] | join(";")}' \
     | sed -E 's/("git": ").*(github.com\/[[:alnum:]\-]+).*/\1\2",/' \
     | jq -r '[.. | if type != "object" then . else empty end] | join(",")'
 
@@ -15,3 +19,5 @@ curl -s  "$URL" \
 
 # format:
 # salary,currency,skills,github,source
+
+# TODO: one resume can have multiple github links
