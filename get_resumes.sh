@@ -10,5 +10,5 @@ get_resumes_from_page() {
     # P.S. 7 in awk substr is length of regexp part "?query="
 }
 
+get_resumes_from_page 0
 get_resumes_from_page 1
-get_resumes_from_page 2
