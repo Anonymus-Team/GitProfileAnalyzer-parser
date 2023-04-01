@@ -2,6 +2,12 @@
 
 URL="$1"
 
+# format:
+# source,salary,currency,github,skills
+
+# first of, print "source"
+echo -n "$URL,"
+
 curl -s  "$URL" \
     | grep -Po '"resume": \K{.*}, "resumeIdsProfTestAttached":' \
     | head -c -31 \
@@ -16,8 +22,5 @@ curl -s  "$URL" \
 # last jq is finally to flatten all
 
 # P.S. 31 in head is length of part from regex: ', "resumeIdsProfTestAttached":'
-
-# format:
-# salary,currency,skills,github,source
 
 # TODO: one resume can have multiple github links
