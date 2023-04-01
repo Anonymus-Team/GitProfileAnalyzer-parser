@@ -13,6 +13,8 @@ curl -s  "$URL" \
     | head -c -31 \
     | jq '{salary: .salary.value,
         git: [.skills.value,
+              .keySkills.value[].string,
+              .experience.value[].prettyUrl,
               .experience.value[].description
              ] | join(" "),
         skills: [.keySkills.value[].string] | join(";")}' \
@@ -24,3 +26,6 @@ curl -s  "$URL" \
 # P.S. 31 in head is length of part from regex: ', "resumeIdsProfTestAttached":'
 
 # TODO: one resume can have multiple github links
+
+# TODO: bug: some resumes have github link inside some not yet handled fields.
+# For example, "portfolio" probably can have it too
