@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL='https://dubna.hh.ru/search/resume?text=github&area=1&ored_clusters=true&order_by=relevance&search_period=0&logic=normal&pos=full_text&exp_period=all_time&label=only_with_salary&page='
+URL='https://dubna.hh.ru/search/resume?text=github.com%2F.%2B&area=1&ored_clusters=true&order_by=relevance&search_period=0&logic=normal&pos=full_text&exp_period=all_time&label=only_with_salary&page='
 
 get_resumes_from_page() {
     pagenum="$1"
