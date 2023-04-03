@@ -3,7 +3,7 @@
 URL="$1"
 
 # format:
-# source,salary,currency,github,skills
+# source,salary,currency,github,title,area,gender,age,experience,skills
 
 # first of, print "source"
 echo -n "$URL,"
@@ -18,6 +18,11 @@ curl -s  "$URL" \
               .experience.value[].prettyUrl,
               .experience.value[].description
              ] | join(" "),
+        title: .title.value,
+        area: .area.value.title,
+        gender: .gender.value,
+        age: .age.value,
+        experience: [.totalExperience[] | tostring] | join(", "),
         skills: [.keySkills.value[].string] | join(";")}' \
     | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I' \
     | jq -r '[.. | if type != "object" then . else empty end] | @csv'
