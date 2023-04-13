@@ -21,7 +21,10 @@ curl -s  "$URL" \
         age: .age.value,
         experience: [.totalExperience[]],
         skills: [.keySkills.value[].string]}' \
-    | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I'
+    | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I' \
+    | jq -c
+
+# last jq is finally to flatten all
 
 # P.S. 31 in head is length of part from regex: ', "resumeIdsProfTestAttached":'
 
