@@ -5,9 +5,6 @@ URL="$1"
 # format:
 # source,salary,currency,github,title,area,gender,age,experience,skills
 
-# first of, print "source"
-echo -n "$URL,"
-
 curl -s  "$URL" \
     | grep -Po '"resume": \K{.*}, "resumeIdsProfTestAttached":' \
     | head -c -31 \
@@ -22,12 +19,9 @@ curl -s  "$URL" \
         area: .area.value.title,
         gender: .gender.value,
         age: .age.value,
-        experience: [.totalExperience[] | tostring] | join(", "),
-        skills: [.keySkills.value[].string] | join(";")}' \
-    | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I' \
-    | jq -r '[.. | if type != "object" then . else empty end] | @csv'
-
-# last jq is finally to flatten all
+        experience: [.totalExperience[]],
+        skills: [.keySkills.value[].string]}' \
+    | sed -E 's/("git": ").*(github.com\/[[:alnum:]-]+).*/\1\2",/I'
 
 # P.S. 31 in head is length of part from regex: ', "resumeIdsProfTestAttached":'
 
