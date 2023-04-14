@@ -19,7 +19,9 @@ while IFS= read -r line; do
             https://api.github.com/users/{$NICK}/repos);
                 
         if REPS=$(echo $REPS_JSON | jq -ce '[.[].html_url]'); then
-            echo $line | jq -c --argjson reps $REPS '.git = $reps';
+            RES=$(echo $line | jq -c --argjson reps $REPS '.git = $reps');
+            RES="{\"$(echo $RES | md5sum | cut -f1 -d" ")\":"$RES"}";
+            echo $RES;
         fi;
     fi;
 done < $1;
