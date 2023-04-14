@@ -17,7 +17,7 @@ while IFS= read -r line; do
         -H "X-GitHub-Api-Version: 2022-11-28" \
         https://api.github.com/users/{$NICK}/repos \
         | jq -c '[.[].html_url]');
-    echo $line | jq -c --arg reps "$REPS" '.git = $reps';
+    echo $line | jq -c --argjson reps $REPS '.git = $reps';
 done < $1;
 
 # TODO: check if account exist
