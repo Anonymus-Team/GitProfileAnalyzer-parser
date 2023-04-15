@@ -20,7 +20,8 @@ while IFS= read -r line; do
                 
         if REPS=$(echo $REPS_JSON | jq -ce '[.[].html_url]'); then
             RES=$(echo $line | jq -c --argjson reps $REPS '.github = $reps');
-            RES="{\"$(echo $RES | md5sum | cut -f1 -d" ")\":"$RES"}";
+            HASH=$(echo $RES | md5sum | cut -f1 -d" ");
+            RES=$(echo $RES | jq -c --arg hash $HASH '{id: $hash} + .')
             echo $RES;
         fi;
     fi;
