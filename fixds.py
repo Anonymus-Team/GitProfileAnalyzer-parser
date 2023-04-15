@@ -5,8 +5,9 @@ import pandas as pd
 
 DESCRIPTION = """Process a dataset of CVs
 in order to correct the name of cities,
-convert salary into the same monetary units 
-and store work experience in months."""
+cut off unrealistic salaries 
+and convert them to the same monetary units,
+store work experience in months"""
 
 COLUMN_NAMES = ['link', 'salary', 'currency', 'github', 'title', 
                 'location', 'gender', 'age', 'experience', 'tags']
@@ -14,7 +15,8 @@ REPLACEMENT = {
     'Moscow': 'Москва',
     'Cheboksary': 'Чебоксары',
     'Nalchik': 'Нальчик'}
-EXCHANGE_RATE = 75 # USD to RUB
+EXCHANGE_RATE = 75 # USD to RUR
+SALARY_LOWER_CUT = 10_000 # RUR
 
 parser = argparse.ArgumentParser(
                     prog='fixds',
@@ -28,8 +30,8 @@ parser.add_argument('-i', '--input',
 parser.add_argument('-o', '--output',
                     metavar='FILE_PATH',
                     dest='output_path',
-                    help='Output path of the processed dataset',
-                    default='out.csv')
+                    help='Output path of the processed dataset in .json format',
+                    default='out.json')
 
 args = parser.parse_args()
 
@@ -46,16 +48,24 @@ for old_name, new_name in REPLACEMENT.items():
 
 # convert salary to common currenсy
 df.loc[df['currency'] == 'USD', 'salary'] *= EXCHANGE_RATE
-df['currency'].replace('USD', 'RUB', inplace=True)
+df['currency'].replace('USD', 'RUR', inplace=True)
 
-# work experience to month
+# cut off unrealistic salaries
+df = df.loc[df['salary'] >= SALARY_LOWER_CUT]
+
+# drop the 'currency' column
+df = df.drop(columns=['currency'])
+
+# convert work experience to months
 def experience_to_month(value: str):
     if not value:
         return None
     years, months = value.split(', ')
     return int(years) * 12 + int(months)
-
 df['experience'] = df['experience'].apply(experience_to_month)
 
-# save dataset to .csv
-df.to_csv(args.output_path, index=False)
+# save to .json
+to_list = lambda x: str(x).split(';') 
+df['tags'] = df['tags'].apply(to_list)
+
+df.to_json(args.output_path, orient="records", force_ascii=False, lines=True)
