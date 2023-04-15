@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 while IFS= read -r line; do 
-    URL=$(echo $line | jq -c .git);
+    URL=$(echo $line | jq -c .github);
 
     if curl --output /dev/null --silent --head --fail "${URL:1:-1}"; then
         # need a substring cos jq outputs url like "github.com/ExampleUsr",
@@ -19,7 +19,7 @@ while IFS= read -r line; do
             https://api.github.com/users/{$NICK}/repos);
                 
         if REPS=$(echo $REPS_JSON | jq -ce '[.[].html_url]'); then
-            RES=$(echo $line | jq -c --argjson reps $REPS '.git = $reps');
+            RES=$(echo $line | jq -c --argjson reps $REPS '.github = $reps');
             RES="{\"$(echo $RES | md5sum | cut -f1 -d" ")\":"$RES"}";
             echo $RES;
         fi;
