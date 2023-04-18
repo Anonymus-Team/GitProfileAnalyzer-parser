@@ -15,5 +15,7 @@ get_resumes_from_page() {
     # them, so we don't have fields which contains github links. So sad
 }
 
-get_resumes_from_page 0
-get_resumes_from_page 1
+# TODO: dirty hack, should retrieve and consider real pages count
+seq 0 8 | while read -r page; do
+    get_resumes_from_page $page
+done
