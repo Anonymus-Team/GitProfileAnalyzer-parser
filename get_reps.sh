@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/bash
 
 while IFS= read -r line; do 
     URL=$(echo $line | jq -c .github);
