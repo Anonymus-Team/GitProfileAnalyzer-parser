@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SEARCH_URL='https://dubna.hh.ru/search/resume?text=github.com%2F.%2B&area=1&ored_clusters=true&order_by=relevance&search_period=0&logic=normal&pos=full_text&exp_period=all_time&label=only_with_salary&items_on_page=100&page='
+SEARCH_URL='https://hh.ru/search/resume?label=only_with_salary&relocation=living_or_relocation&gender=unknown&text=github.com%2F.%2B&isDefaultArea=true&exp_period=all_time&logic=normal&pos=full_text&search_period=0&items_on_page=100&page='
 
-export RESUME_URL='https://dubna.hh.ru/resume/'
+export RESUME_URL='https://hh.ru/resume/'
 
 get_resumes_from_page() {
     pagenum="$1"
