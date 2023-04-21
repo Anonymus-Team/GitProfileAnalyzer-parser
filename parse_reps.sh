@@ -11,6 +11,8 @@ cd $TMP_FOLDER;
 while IFS= read -r line; do 
     HASH=$(echo $line | jq -r '.id');
 
+    GHPNICK=$(echo $line | jq -r '.ghpNick')
+
     touch $DIFFS_FOLDER/$HASH;
 
     URLS=( $(echo $line | jq -r '.github | join("\n")') );
@@ -19,11 +21,15 @@ while IFS= read -r line; do
         git clone $repo $TMP_FOLDER --single-branch --no-tags --bare; 
 
         # get an array of all commits id and reverse it
-        HISTORY=( $(git log --pretty=format:"%h") );
+        HISTORY=( $(git log --pretty=format:"%h" --author=$GHPNICK) );
         HISTORY=( $(printf '%s\n' "${HISTORY[@]}" | tac | tr '\n' ' '; echo) );
 
+        if [[ $(echo ${HISTORY[@]} | wc -w) = 0 ]]; then
+           continue;
+        fi;
+
         for commit in ${HISTORY[@]}; do
-            git show $cur_commit >> $DIFFS_FOLDER/$HASH;
+            git show --pretty="%b" $cur_commit >> $DIFFS_FOLDER/$HASH;
         done;
 
         rm -rf *;
