@@ -22,6 +22,7 @@ while IFS= read -r line; do
             RES=$(echo $line | jq -c --argjson reps $REPS '.github = $reps');
             HASH=$(echo $RES | md5sum | cut -f1 -d" ");
             RES=$(echo $RES | jq -c --arg hash $HASH '{id: $hash} + .')
+            RES=$(echo $RES | jq -c --arg nick $NICK '. + {ghpNick: $nick}')
             echo $RES;
         fi;
     fi;
