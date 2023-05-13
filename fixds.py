@@ -37,10 +37,10 @@ args = parser.parse_args()
 
 
 try:
-    df = pd.read_csv(args.input_path, names=COLUMN_NAMES)
+    df = pd.read_csv(args.input_path, names=COLUMN_NAMES, on_bad_lines='skip')
 except Exception as exp:
     print(exp, '\nhint: use options `-h` or `--help` to get help', file=sys.stderr)
-    exit(exp.errno)
+    exit(-1)
 
 # fix city names
 for old_name, new_name in REPLACEMENT.items():
