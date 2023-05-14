@@ -25,6 +25,7 @@ while IFS= read -r line; do
         HISTORY=( $(printf '%s\n' "${HISTORY[@]}" | tac | tr '\n' ' '; echo) );
 
         if [[ $(echo ${HISTORY[@]} | wc -w) = 0 ]]; then
+	   rm -rf *;
            continue;
         fi;
 
