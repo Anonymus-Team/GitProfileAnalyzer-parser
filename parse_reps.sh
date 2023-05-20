@@ -33,7 +33,7 @@ while IFS= read -r line; do
         fi;
 
         for commit in ${HISTORY[@]}; do
-            git show --pretty="%b" $cur_commit >> $DIFFS_FOLDER/$HASH;
+            git show --pretty="%b" "$commit" >> $DIFFS_FOLDER/$HASH;
         done;
 
         rm -rf *;
