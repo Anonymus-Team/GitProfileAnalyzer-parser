@@ -8,6 +8,9 @@ mkdir $TMP_FOLDER;
 
 cd $TMP_FOLDER;
 
+# skip login prompts on git clone
+export GIT_TERMINAL_PROMPT=false
+
 while IFS= read -r line; do 
     HASH=$(echo $line | jq -r '.id');
 
@@ -17,7 +20,7 @@ while IFS= read -r line; do
 
     URLS=( $(echo $line | jq -r '.github | join("\n")') );
     for repo in ${URLS[@]}; do 
-        # clone only .git folder and one branch only
+        # clone only .git folder and one branch only (and skip login prompts)
         git clone $repo $TMP_FOLDER --single-branch --no-tags --bare; 
 
         # get an array of all commits id and reverse it
@@ -30,7 +33,7 @@ while IFS= read -r line; do
         fi;
 
         for commit in ${HISTORY[@]}; do
-            git show --pretty="%b" $cur_commit >> $DIFFS_FOLDER/$HASH;
+            git show --pretty="%b" "$commit" >> $DIFFS_FOLDER/$HASH;
         done;
 
         rm -rf *;
